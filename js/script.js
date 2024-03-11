@@ -1,26 +1,49 @@
+// API ключи
 const apiKey = '176d1ae515e54fd4a0492612241003';
 const apiKeyMaps = "7d34c100-dd2f-42b1-8c0a-d17b16ffd716";
 const header = document.querySelector("header");
 const today = document.querySelector(".today");
 const form = document.querySelector("#search");
 const input = document.querySelector("#search_city");
+
+// Текущая дата, переменные
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-
-
 let date = new Date();
 let currentDay = date.getDay();
 let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentHours = date.getHours();
 let currentMinutes = date.getMinutes();
-
 function getElementAhead(positions) {
     const nextDay = (currentDay + positions) % days.length;
     currentDay = nextDay;
     return days[nextDay];
 }
+
+// переменные ждя сохранения информации с API
+
+let currentWeather;
+let forecastWeather;
+let country;
+let temp_c;
+let temp_f;
+let condition_text;
+let condition_icon;
+let feelslike_c;
+let feelslike_f;
+let humidity;
+let wind; //в км/ч
+let date_first_day;
+let temp_c_first_day;
+let temp_f_first_day;
+let condition_first_day;
+let temp_c_second_day;
+let temp_f_second_day;
+let condition_second_day;
+let temp_c_third_day;
+let temp_f_third_day;
+let condition_third_day;
 
 fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
     (response) => response.json()
@@ -39,22 +62,27 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
         ])
             .then(responses => Promise.all(responses.map(response => response.json())))
             .then(data => {
-                let currentWeather = data[0];
-                let forecastWeather = data[1];
-                let country = currentWeather.location.country;
-                let temp = currentWeather.current.temp_c;
-                let condition_text = currentWeather.current.condition.text;
-                let condition_icon = currentWeather.current.condition.icon;
-                let feelslike = currentWeather.current.feelslike_c;
-                let humidity = currentWeather.current.humidity;
-                let wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
-                let date_first_day = forecastWeather.forecast.forecastday[1].date;
-                let temp_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
-                let condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
-                let temp_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
-                let condition_second_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
-                let temp_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_c);
-                let condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
+                currentWeather = data[0];
+                forecastWeather = data[1];
+                country = currentWeather.location.country;
+                temp_c = currentWeather.current.temp_c;
+                temp_f = Math.round(currentWeather.current.temp_f);
+                condition_text = currentWeather.current.condition.text;
+                condition_icon = currentWeather.current.condition.icon;
+                feelslike_c = currentWeather.current.feelslike_c;
+                feelslike_f = Math.round(currentWeather.current.feelslike_f);
+                humidity = currentWeather.current.humidity;
+                wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
+                date_first_day = forecastWeather.forecast.forecastday[1].date;
+                temp_c_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
+                temp_f_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_f);
+                condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
+                temp_c_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
+                temp_f_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_f);
+                condition_second_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
+                temp_c_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_c);
+                temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_f);
+                condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
 
                 // initMap();
 
@@ -93,14 +121,14 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
     </div>
     <div class="today">
         <div class="today__temperature">
-            <p>${temp}°</p>
+            <p id="today__temperature">${temp_c}°</p>
         </div>
         <div class="today__icon">
             <img src=${condition_icon}>
         </div>
         <div class="today__details">
             <p>${condition_text}</p>
-            <p>Feels like: ${feelslike}°</p>
+            <p id="feelslike">Feels like: ${feelslike_c}°</p>
             <p>Wind: ${wind}m/s </p>
             <p>Humidity: ${humidity}%</p>
         </div>
@@ -111,7 +139,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
                 <p>${getElementAhead(1)}</p>
             </div>
             <div class="days__temperature">
-                <p>${temp_first_day}°</p>
+                <p id="temp_first_day">${temp_c_first_day}°</p>
             </div>
             <div class="days__icon">
                 <img src=${condition_first_day}>
@@ -122,7 +150,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
                 <p>${getElementAhead(1)}</p>
             </div>
             <div class="days__temperature">
-                <p>${temp_second_day}°</p>
+                <p id="temp_second_day">${temp_c_second_day}°</p>
             </div>
             <div class="days__icon">
                 <img src=${condition_second_day}>
@@ -133,7 +161,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
                 <p>${getElementAhead(1)}</p>
             </div>
             <div class="days__temperature">
-                <p>${temp_third_day}°</p>
+                <p id="temp_third_day">${temp_c_third_day}°</p>
             </div>
             <div class="days__icon">
                 <img src=${condition_third_day}>
@@ -155,6 +183,37 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
         // .catch(error => console.error('Ошибка при получении данных:', error));
     })
 
+setTimeout(() => {
+    // Получаем все радио-кнопки с выбором температурной единицы
+        const temperatureUnitRadios = document.querySelectorAll('input[name="unit-of-temperature"]');
+
+        // Добавляем обработчик события на каждую радио-кнопку
+        temperatureUnitRadios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.value === 'C') {
+                    // Действие, если выбраны градусы Цельсия
+                    console.log('Выбраны градусы Цельсия');
+                    document.getElementById("today__temperature").textContent = temp_c;
+                    document.getElementById("feelslike").textContent = feelslike_c
+                    document.getElementById("temp_first_day").textContent = temp_c_first_day
+                    document.getElementById("temp_second_day").textContent = temp_c_second_day
+                    document.getElementById("temp_third_day").textContent = temp_c_third_day
+
+
+                } else if (this.value === 'F') {
+                    // Действие, если выбраны градусы Фаренгейта
+                    console.log('Выбраны градусы Фаренгейта');
+                    document.getElementById("today__temperature").textContent = temp_f;
+                    document.getElementById("feelslike").textContent = feelslike_f
+                    document.getElementById("temp_first_day").textContent = temp_f_first_day
+                    document.getElementById("temp_second_day").textContent = temp_f_second_day
+                    document.getElementById("temp_third_day").textContent = temp_f_third_day
+
+            
+                }
+            })
+        })
+}, 1000)
 form.onsubmit = function (event) {
     event.preventDefault(); // отменяем отправку формы
     // let city

@@ -15,6 +15,7 @@ let currentDate = date.getDate();
 let currentMonth = date.getMonth();
 let currentHours = date.getHours();
 let currentMinutes = date.getMinutes();
+// функция определения дня недели на следующие три дня
 function getElementAhead(positions) {
     const nextDay = (currentDay + positions) % days.length;
     currentDay = nextDay;
@@ -22,7 +23,7 @@ function getElementAhead(positions) {
 }
 
 // переменные ждя сохранения информации с API
-
+let city;
 let currentWeather;
 let forecastWeather;
 let country;
@@ -45,222 +46,93 @@ let temp_c_third_day;
 let temp_f_third_day;
 let condition_third_day;
 
-fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
-    (response) => response.json()
-).then(
-    (jsonResponse) => {
-        let city = jsonResponse.city;
-        const url_1 = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
-        const url_2 = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=4`;
-        // const url_3 = ` https://api-maps.yandex.ru/v3/?apikey=${apiKeyMaps}&lang=ru_RU`;
-        Promise.all([
-            fetch(url_1),
-            fetch(url_2),
-            // fetch(url_3, {
-            //     mode: 'no-cors'
-            //   } ),
-        ])
-            .then(responses => Promise.all(responses.map(response => response.json())))
-            .then(data => {
-                currentWeather = data[0];
-                forecastWeather = data[1];
-                country = currentWeather.location.country;
-                temp_c = currentWeather.current.temp_c;
-                temp_f = Math.round(currentWeather.current.temp_f);
-                condition_text = currentWeather.current.condition.text;
-                condition_icon = currentWeather.current.condition.icon;
-                feelslike_c = currentWeather.current.feelslike_c;
-                feelslike_f = Math.round(currentWeather.current.feelslike_f);
-                humidity = currentWeather.current.humidity;
-                wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
-                date_first_day = forecastWeather.forecast.forecastday[1].date;
-                temp_c_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
-                temp_f_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_f);
-                condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
-                temp_c_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
-                temp_f_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_f);
-                condition_second_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
-                temp_c_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_c);
-                temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_f);
-                condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
-
-                // initMap();
-
-                // async function initMap() {
-                //     // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
-                //     await ymaps3.ready;
-
-                //     const { YMap, YMapDefaultSchemeLayer } = ymaps3;
-
-                //     // Иницилиазируем карту
-                //     const map = new YMap(
-                //         // Передаём ссылку на HTMLElement контейнера
-                //         document.getElementById('map'),
-
-                //         // Передаём параметры инициализации карты
-                //         {
-                //             location: {
-                //                 // Координаты центра карты
-                //                 center: [37.588144, 55.733842],
-
-                //                 // Уровень масштабирования
-                //                 zoom: 10
-                //             }
-                //         }
-                //     );
-
-                //     // Добавляем слой для отображения схематической карты
-                //     map.addChild(new YMapDefaultSchemeLayer());
-                // }
-                // Здесь можно продолжить обработку данных или выводить их на экран
-                const html = ` <main id="main">
-<div>
-    <div class="title">
-        <p class="title__city">${city}<span>, ${country}</span></p>
-        <p class="tittle__date">${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}</p>
-    </div>
-    <div class="today">
-        <div class="today__temperature">
-            <p id="today__temperature">${temp_c}°</p>
-        </div>
-        <div class="today__icon">
-            <img src=${condition_icon}>
-        </div>
-        <div class="today__details">
-            <p>${condition_text}</p>
-            <p id="feelslike">Feels like: ${feelslike_c}°</p>
-            <p>Wind: ${wind}m/s </p>
-            <p>Humidity: ${humidity}%</p>
-        </div>
-    </div>
-    <div class="days">
-        <div>
-            <div class="days__day-of-week">
-                <p>${getElementAhead(1)}</p>
-            </div>
-            <div class="days__temperature">
-                <p id="temp_first_day">${temp_c_first_day}°</p>
-            </div>
-            <div class="days__icon">
-                <img src=${condition_first_day}>
-            </div>
-        </div>
-        <div>
-            <div class="days__day-of-week">
-                <p>${getElementAhead(1)}</p>
-            </div>
-            <div class="days__temperature">
-                <p id="temp_second_day">${temp_c_second_day}°</p>
-            </div>
-            <div class="days__icon">
-                <img src=${condition_second_day}>
-            </div>
-        </div>
-        <div>
-            <div class="days__day-of-week">
-                <p>${getElementAhead(1)}</p>
-            </div>
-            <div class="days__temperature">
-                <p id="temp_third_day">${temp_c_third_day}°</p>
-            </div>
-            <div class="days__icon">
-                <img src=${condition_third_day}>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="map">
-    <div id="map"></div>
-    <div class="map__coordinates">
-        <p>Широта: 53°54'</p>
-        <p>Долгота: 27°34'</p>
-    </div>
-</div>
-</main>`
-                header.insertAdjacentHTML('afterend', html)
-                input.value = ''
-            })
-        // .catch(error => console.error('Ошибка при получении данных:', error));
-    })
-
-setTimeout(() => {
-    // Получаем все радио-кнопки с выбором температурной единицы
-        const temperatureUnitRadios = document.querySelectorAll('input[name="unit-of-temperature"]');
-
-        // Добавляем обработчик события на каждую радио-кнопку
-        temperatureUnitRadios.forEach(radio => {
-            radio.addEventListener('change', function () {
-                if (this.value === 'C') {
-                    // Действие, если выбраны градусы Цельсия
-                    console.log('Выбраны градусы Цельсия');
-                    document.getElementById("today__temperature").textContent = temp_c;
-                    document.getElementById("feelslike").textContent = feelslike_c
-                    document.getElementById("temp_first_day").textContent = temp_c_first_day
-                    document.getElementById("temp_second_day").textContent = temp_c_second_day
-                    document.getElementById("temp_third_day").textContent = temp_c_third_day
-
-
-                } else if (this.value === 'F') {
-                    // Действие, если выбраны градусы Фаренгейта
-                    console.log('Выбраны градусы Фаренгейта');
-                    document.getElementById("today__temperature").textContent = temp_f;
-                    document.getElementById("feelslike").textContent = feelslike_f
-                    document.getElementById("temp_first_day").textContent = temp_f_first_day
-                    document.getElementById("temp_second_day").textContent = temp_f_second_day
-                    document.getElementById("temp_third_day").textContent = temp_f_third_day
-
-            
-                }
-            })
-        })
-}, 1000)
-form.onsubmit = function (event) {
-    event.preventDefault(); // отменяем отправку формы
-    // let city
-    city = input.value.trim()
-    console.log(city)
+// функция полученися данных с API
+function getData(apiKey, apiKeyMaps) {
     const url_1 = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
     const url_2 = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=4`;
+    // const url_3 = ` https://api-maps.yandex.ru/v3/?apikey=${apiKeyMaps}&lang=ru_RU`;
     Promise.all([
         fetch(url_1),
-        fetch(url_2)
+        fetch(url_2),
+        // fetch(url_3, {
+        //     mode: 'no-cors'
+        //   } ),
     ])
         .then(responses => Promise.all(responses.map(response => response.json())))
         .then(data => {
-            let currentWeather = data[0];
-            let forecastWeather = data[1];
+            currentWeather = data[0];
+            forecastWeather = data[1];
+            country = currentWeather.location.country;
+            temp_c = currentWeather.current.temp_c;
+            temp_f = Math.round(currentWeather.current.temp_f);
+            condition_text = currentWeather.current.condition.text;
+            condition_icon = currentWeather.current.condition.icon;
+            feelslike_c = currentWeather.current.feelslike_c;
+            feelslike_f = Math.round(currentWeather.current.feelslike_f);
+            humidity = currentWeather.current.humidity;
+            wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
+            date_first_day = forecastWeather.forecast.forecastday[1].date;
+            temp_c_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
+            temp_f_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_f);
+            condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
+            temp_c_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
+            temp_f_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_f);
+            condition_second_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
+            temp_c_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_c);
+            temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_f);
+            condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
 
-            let country = currentWeather.location.country;
-            let temp = currentWeather.current.temp_c;
-            let condition_text = currentWeather.current.condition.text;
-            let condition_icon = currentWeather.current.condition.icon;
-            let feelslike = currentWeather.current.feelslike_c;
-            let humidity = currentWeather.current.humidity;
-            let wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
-            let temp_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
-            let condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
-            let temp_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
-            let condition_second_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
-            let temp_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_c);
-            let condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
+            // initMap();
 
+            // async function initMap() {
+            //     // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
+            //     await ymaps3.ready;
+
+            //     const { YMap, YMapDefaultSchemeLayer } = ymaps3;
+
+            //     // Иницилиазируем карту
+            //     const map = new YMap(
+            //         // Передаём ссылку на HTMLElement контейнера
+            //         document.getElementById('map'),
+
+            //         // Передаём параметры инициализации карты
+            //         {
+            //             location: {
+            //                 // Координаты центра карты
+            //                 center: [37.588144, 55.733842],
+
+            //                 // Уровень масштабирования
+            //                 zoom: 10
+            //             }
+            //         }
+            //     );
+
+            //     // Добавляем слой для отображения схематической карты
+            //     map.addChild(new YMapDefaultSchemeLayer());
+            // }
             // Здесь можно продолжить обработку данных или выводить их на экран
-            const html = ` <main id="main">
+        }
+        )
+}
+
+// функция отрисовки HTML
+function render() {
+    const html = ` <main id="main">
     <div>
         <div class="title">
             <p class="title__city">${city}<span>, ${country}</span></p>
-            <p class="tittle__date">Tue 05 march 13:31</p>
+            <p class="tittle__date">${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}</p>
         </div>
         <div class="today">
             <div class="today__temperature">
-                <p>${temp}°</p>
+                <p id="today__temperature">${temp_c}°</p>
             </div>
             <div class="today__icon">
                 <img src=${condition_icon}>
             </div>
             <div class="today__details">
                 <p>${condition_text}</p>
-                <p>Feels like: ${feelslike}°</p>
+                <p id="feelslike">Feels like: ${feelslike_c}°</p>
                 <p>Wind: ${wind}m/s </p>
                 <p>Humidity: ${humidity}%</p>
             </div>
@@ -268,10 +140,10 @@ form.onsubmit = function (event) {
         <div class="days">
             <div>
                 <div class="days__day-of-week">
-                    <p>Wednesday</p>
+                    <p>${getElementAhead(1)}</p>
                 </div>
                 <div class="days__temperature">
-                    <p>${temp_first_day}°</p>
+                    <p id="temp_first_day">${temp_c_first_day}°</p>
                 </div>
                 <div class="days__icon">
                     <img src=${condition_first_day}>
@@ -279,10 +151,10 @@ form.onsubmit = function (event) {
             </div>
             <div>
                 <div class="days__day-of-week">
-                    <p>Thursday</p>
+                    <p>${getElementAhead(1)}</p>
                 </div>
                 <div class="days__temperature">
-                    <p>${temp_second_day}°</p>
+                    <p id="temp_second_day">${temp_c_second_day}°</p>
                 </div>
                 <div class="days__icon">
                     <img src=${condition_second_day}>
@@ -290,10 +162,10 @@ form.onsubmit = function (event) {
             </div>
             <div>
                 <div class="days__day-of-week">
-                    <p>Friday</p>
+                    <p>${getElementAhead(1)}</p>
                 </div>
                 <div class="days__temperature">
-                    <p>${temp_third_day}°</p>
+                    <p id="temp_third_day">${temp_c_third_day}°</p>
                 </div>
                 <div class="days__icon">
                     <img src=${condition_third_day}>
@@ -301,21 +173,81 @@ form.onsubmit = function (event) {
             </div>
         </div>
     </div>
-    <div class="map"><div id="map">
-        </div>
+    <div class="map">
+        <div id="map"></div>
         <div class="map__coordinates">
             <p>Широта: 53°54'</p>
             <p>Долгота: 27°34'</p>
         </div>
     </div>
-</main>`
-            const prev_data = document.querySelector('#main');
-            if (prev_data) prev_data.remove();
-            header.insertAdjacentHTML('afterend', html)
-            input.value = ''
-        })
-    // .catch(error => console.error('Ошибка при получении данных:', error));
+    </main>`
+    const prev_data = document.querySelector('#main');
+    if (prev_data) prev_data.remove();
+    header.insertAdjacentHTML('afterend', html)
+    input.value = ''
 }
+
+// Реализация изменения единиц измерения
+function changeUnitsOfTemperature() {
+    // Получаем все радио-кнопки с выбором температурной единицы
+    const temperatureUnitRadios = document.querySelectorAll('input[name="unit-of-temperature"]');
+
+    // Добавляем обработчик события на каждую радио-кнопку
+    temperatureUnitRadios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.value === 'C') {
+                // Действие, если выбраны градусы Цельсия
+                console.log('Выбраны градусы Цельсия');
+                document.getElementById("today__temperature").textContent = temp_c;
+                document.getElementById("feelslike").textContent = feelslike_c
+                document.getElementById("temp_first_day").textContent = temp_c_first_day
+                document.getElementById("temp_second_day").textContent = temp_c_second_day
+                document.getElementById("temp_third_day").textContent = temp_c_third_day
+
+
+            } else if (this.value === 'F') {
+                // Действие, если выбраны градусы Фаренгейта
+                console.log('Выбраны градусы Фаренгейта');
+                document.getElementById("today__temperature").textContent = temp_f;
+                document.getElementById("feelslike").textContent = feelslike_f
+                document.getElementById("temp_first_day").textContent = temp_f_first_day
+                document.getElementById("temp_second_day").textContent = temp_f_second_day
+                document.getElementById("temp_third_day").textContent = temp_f_third_day
+
+
+            }
+        })
+    })
+}
+
+
+// .catch(error => console.error('Ошибка при получении данных:', error));
+
+// создание стартовой страницы
+fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
+    (response) => response.json()
+).then(
+    (jsonResponse) => {
+        city = jsonResponse.city;
+        getData(apiKey, apiKeyMaps);
+    })
+setTimeout(() => {
+    render()
+}, 300)
+changeUnitsOfTemperature()
+
+
+form.onsubmit = function (event) {
+    event.preventDefault(); // отменяем отправку формы
+    city = input.value.trim()
+    console.log(city)
+    getData(apiKey, apiKeyMaps);
+
+    setTimeout(() => {
+        render()
+    }, 300)
+}
+
 
 
 

@@ -115,18 +115,18 @@ div.option__units-of-temperature input[type=radio]:checked+label {
         gap: 5px;
     }
 
-    .search {
+    #search {
         flex-direction: column;
         height: max-content;
         align-items: flex-end;
     }
 
-    .search>input {
+    #search>input {
         width: 125px;
         border-radius: 5px 5px 0 5px;
     }
 
-    .search>button {
+    #search>button {
         width: 125px;
         height: 30px;
         border-radius: 5px 0 5px 5px;
@@ -143,22 +143,22 @@ div.option__units-of-temperature input[type=radio]:checked+label {
         height: 30px;
     }
 
-    form {
+    form.option__units-of-temperature {
         width: 60px;
         height: 30px;
     }
 
-    .option__units-of-temperature label {
+    div.option__units-of-temperature label {
         width: 30px;
         height: 30px;
         line-height: 30px;
     }
 
-    .search>input {
+    #search>input {
         height: 30px;
     }
 
-    .search>button {
+    #search>button {
         height: 25px;
     }
 }

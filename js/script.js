@@ -27,32 +27,9 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
                 let forecastWeather = data[1];
                 let country = currentWeather.location.country;
                 let temp = currentWeather.current.temp_c;
-                // Получаем все радио-кнопки с выбором температурной единицы
-                const temperatureUnitRadios = document.querySelectorAll('input[name="unit-of-temperature"]');
-
-                // Добавляем обработчик события на каждую радио-кнопку
-                temperatureUnitRadios.forEach(radio => {
-                    radio.addEventListener('change', function () {
-                        if (this.value === 'C') {
-                            // Действие, если выбраны градусы Цельсия
-                            console.log('Выбраны градусы Цельсия');
-                            temp = currentWeather.current.temp_c;
-
-                        } else if (this.value === 'F') {
-                            // Действие, если выбраны градусы Фаренгейта
-                            console.log('Выбраны градусы Фаренгейта');
-                            temp = currentWeather.current.temp_f;
-                        }
-                        // Выводим обновленное значение temp
-                        console.log('Текущая температура: ' + temp);
-                    });
-                });
-
-
                 let condition_text = currentWeather.current.condition.text;
                 let condition_icon = currentWeather.current.condition.icon;
-                let feelslike_c = currentWeather.current.feelslike_c;
-                let feelslike_f = currentWeather.current.feelslike_f;
+                let feelslike = currentWeather.current.feelslike_c;
                 let humidity = currentWeather.current.humidity;
                 let wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
                 let temp_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
@@ -106,7 +83,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
         </div>
         <div class="today__details">
             <p>${condition_text}</p>
-            <p>Feels like: ${feelslike_c}°</p>
+            <p>Feels like: ${feelslike}°</p>
             <p>Wind: ${wind}m/s </p>
             <p>Humidity: ${humidity}%</p>
         </div>
@@ -148,25 +125,18 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
     </div>
 </div>
 <div class="map">
-    <div id="map">
-        <img src="./images/google.png">
-    </div>
+    <div id="map"></div>
     <div class="map__coordinates">
         <p>Широта: 53°54'</p>
         <p>Долгота: 27°34'</p>
     </div>
 </div>
 </main>`
-                // const prev_data = document.querySelector('#main');
-                // if (prev_data) prev_data.remove;
-
                 header.insertAdjacentHTML('afterend', html)
                 input.value = ''
             })
         // .catch(error => console.error('Ошибка при получении данных:', error));
     })
-// .then (
-// )
 
 form.onsubmit = function (event) {
     event.preventDefault(); // отменяем отправку формы
@@ -186,31 +156,9 @@ form.onsubmit = function (event) {
 
             let country = currentWeather.location.country;
             let temp = currentWeather.current.temp_c;
-                // Получаем все радио-кнопки с выбором температурной единицы
-                const temperatureUnitRadios = document.querySelectorAll('input[name="unit-of-temperature"]');
-
-                // Добавляем обработчик события на каждую радио-кнопку
-                temperatureUnitRadios.forEach(radio => {
-                    radio.addEventListener('change', function () {
-                        if (this.value === 'C') {
-                            // Действие, если выбраны градусы Цельсия
-                            console.log('Выбраны градусы Цельсия');
-                            temp = currentWeather.current.temp_c;
-
-                        } else if (this.value === 'F') {
-                            // Действие, если выбраны градусы Фаренгейта
-                            console.log('Выбраны градусы Фаренгейта');
-                            temp = currentWeather.current.temp_f;
-                        }
-                        // Выводим обновленное значение temp
-                        console.log('Текущая температура: ' + temp);
-                    });
-                });
-                console.log('Текущая температура вне обработчика: ' + temp);
             let condition_text = currentWeather.current.condition.text;
             let condition_icon = currentWeather.current.condition.icon;
-            let feelslike_c = currentWeather.current.feelslike_c;
-            let feelslike_f = currentWeather.current.feelslike_f;
+            let feelslike = currentWeather.current.feelslike_c;
             let humidity = currentWeather.current.humidity;
             let wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
             let temp_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
@@ -236,7 +184,7 @@ form.onsubmit = function (event) {
             </div>
             <div class="today__details">
                 <p>${condition_text}</p>
-                <p>Feels like: ${feelslike_c}°</p>
+                <p>Feels like: ${feelslike}°</p>
                 <p>Wind: ${wind}m/s </p>
                 <p>Humidity: ${humidity}%</p>
             </div>
@@ -277,9 +225,7 @@ form.onsubmit = function (event) {
             </div>
         </div>
     </div>
-    <div class="map">
-        <div class="map__img">
-            <img src="./images/google.png">
+    <div class="map"><div id="map">
         </div>
         <div class="map__coordinates">
             <p>Широта: 53°54'</p>
@@ -288,12 +234,11 @@ form.onsubmit = function (event) {
     </div>
 </main>`
             const prev_data = document.querySelector('#main');
-            if (prev_data) prev_data.remove;
-
+            if (prev_data) prev_data.remove();
             header.insertAdjacentHTML('afterend', html)
             input.value = ''
         })
-        .catch(error => console.error('Ошибка при получении данных:', error));
+        // .catch(error => console.error('Ошибка при получении данных:', error));
 }
 
 

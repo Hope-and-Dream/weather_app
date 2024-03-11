@@ -26,6 +26,7 @@ main {
 
 .today {
     width: 52vw;
+    max-width: 750px;
     height: auto;
     padding: 15px 0 100px 0;
     display: flex;
@@ -108,7 +109,14 @@ main {
 
 
 .days__icon  {
-    width: 66px;
+    width: 64px;
+    height: 64px;
+}
+
+.days__icon >img  {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
 }
 
 .map {
@@ -119,7 +127,7 @@ main {
     width: 30vw;
 }
 
-.map_img {
+#map {
     width: 100%;
     height: 400px;
     background-image: url(../images/google.png);
@@ -173,7 +181,12 @@ main {
         line-height: 32px;
     }
 
-    .map__img {
+    .days__temperature {
+        font-size: 65px;
+        line-height: 80px;
+    }
+
+    #map {
         height: 350px;
     }
   } 
@@ -219,15 +232,16 @@ main {
     }
 
     .days__temperature {
-        font-size: 55px;
-        line-height: 70px;
+        font-size: 40px;
+        line-height: 55px;
     }
 
     .days__icon  {
         width: 50px;
+        height: 50px;
     }
 
-    .map__img {
+    #map{
         height: 300px;
     }
 }
@@ -262,21 +276,22 @@ main {
 }
 
 .days>div {
-width: auto;
+width: 25%;
 }
 
 .days__day-of-week {
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 12px;
+    line-height: 16px;
 }
 
 .days__temperature {
-    font-size: 36px;
-    line-height: 55px;
+    font-size: 25px;
+    line-height: 40px;
 }
 
 .days__icon  {
-    width: 53px;
+    width: 35px;
+    height: 35px;
 }
 
 .map {
@@ -324,7 +339,11 @@ width: auto;
         gap: 10px;
     }
 
-    .map__img {
+    .days>div {
+        width: 80%;
+        }
+
+    #map {
         height: 200px;
         margin-bottom: 10px;
     }

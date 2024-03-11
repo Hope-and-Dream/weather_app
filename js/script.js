@@ -4,7 +4,23 @@ const header = document.querySelector("header");
 const today = document.querySelector(".today");
 const form = document.querySelector("#search");
 const input = document.querySelector("#search_city");
-// let city = 
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+
+let date = new Date();
+let currentDay = date.getDay();
+let currentDate = date.getDate();
+let currentMonth = date.getMonth();
+let currentHours = date.getHours();
+let currentMinutes = date.getMinutes();
+
+function getElementAhead(positions) {
+    const nextDay = (currentDay + positions) % days.length;
+    currentDay = nextDay;
+    return days[nextDay];
+}
 
 fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
     (response) => response.json()
@@ -32,6 +48,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
                 let feelslike = currentWeather.current.feelslike_c;
                 let humidity = currentWeather.current.humidity;
                 let wind = Math.round(currentWeather.current.wind_kph * 1000 / 3600); //в км/ч
+                let date_first_day = forecastWeather.forecast.forecastday[1].date;
                 let temp_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
                 let condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
                 let temp_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
@@ -72,7 +89,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
 <div>
     <div class="title">
         <p class="title__city">${city}<span>, ${country}</span></p>
-        <p class="tittle__date">Tue 05 march 13:31</p>
+        <p class="tittle__date">${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}</p>
     </div>
     <div class="today">
         <div class="today__temperature">
@@ -91,7 +108,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
     <div class="days">
         <div>
             <div class="days__day-of-week">
-                <p>Wednesday</p>
+                <p>${getElementAhead(1)}</p>
             </div>
             <div class="days__temperature">
                 <p>${temp_first_day}°</p>
@@ -102,7 +119,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
         </div>
         <div>
             <div class="days__day-of-week">
-                <p>Thursday</p>
+                <p>${getElementAhead(1)}</p>
             </div>
             <div class="days__temperature">
                 <p>${temp_second_day}°</p>
@@ -113,7 +130,7 @@ fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(
         </div>
         <div>
             <div class="days__day-of-week">
-                <p>Friday</p>
+                <p>${getElementAhead(1)}</p>
             </div>
             <div class="days__temperature">
                 <p>${temp_third_day}°</p>
@@ -238,7 +255,7 @@ form.onsubmit = function (event) {
             header.insertAdjacentHTML('afterend', html)
             input.value = ''
         })
-        // .catch(error => console.error('Ошибка при получении данных:', error));
+    // .catch(error => console.error('Ошибка при получении данных:', error));
 }
 
 

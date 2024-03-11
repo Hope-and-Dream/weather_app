@@ -22,7 +22,7 @@ function getElementAhead(positions) {
     return days[nextDay];
 }
 
-// переменные ждя сохранения информации с API
+// переменные для сохранения информации с API
 let city;
 let currentWeather;
 let forecastWeather;
@@ -50,13 +50,13 @@ let condition_third_day;
 function getData(apiKey, apiKeyMaps) {
     const url_1 = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
     const url_2 = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=4`;
-    // const url_3 = ` https://api-maps.yandex.ru/v3/?apikey=${apiKeyMaps}&lang=ru_RU`;
+    const url_3 = ` https://api-maps.yandex.ru/v3/?apikey=${apiKeyMaps}&lang=ru_RU`;
     Promise.all([
         fetch(url_1),
         fetch(url_2),
-        // fetch(url_3, {
-        //     mode: 'no-cors'
-        //   } ),
+        fetch(url_3, {
+            mode: 'no-cors'
+          } ),
     ])
         .then(responses => Promise.all(responses.map(response => response.json())))
         .then(data => {
@@ -82,7 +82,7 @@ function getData(apiKey, apiKeyMaps) {
             temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_f);
             condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
 
-            // initMap();
+           
 
             // async function initMap() {
             //     // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
@@ -110,6 +110,7 @@ function getData(apiKey, apiKeyMaps) {
             //     // Добавляем слой для отображения схематической карты
             //     map.addChild(new YMapDefaultSchemeLayer());
             // }
+            // initMap();
             // Здесь можно продолжить обработку данных или выводить их на экран
         }
         )
@@ -220,8 +221,6 @@ function changeUnitsOfTemperature() {
     })
 }
 
-
-// .catch(error => console.error('Ошибка при получении данных:', error));
 
 // создание стартовой страницы
 fetch("https://ipinfo.io/json?token=9bc0959d79615f").then(

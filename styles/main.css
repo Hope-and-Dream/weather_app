@@ -1,0 +1,336 @@
+main {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 100px;
+}
+
+.title__city {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 54px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
+    text-transform: uppercase;
+
+}
+
+.tittle__date {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
+}
+
+.today {
+    width: 52vw;
+    height: auto;
+    padding: 15px 0 100px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    position: relative;
+}
+
+.today__temperature {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+}
+
+.today__temperature>p {
+    font-size: 306px;
+    font-weight: 700;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
+
+}
+
+.today__icon {
+    position: absolute;
+    top: 0px;
+    left: 60%
+}
+
+.today__icon>img {
+    height: 220px;
+}
+
+.today__details {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 37px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
+    text-transform: uppercase;
+}
+
+.days {
+    display: flex;
+    justify-content: space-between;
+    width: 50vw;
+}
+
+.days>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
+    width: 15vw;
+}
+
+.days__day-of-week {
+    grid-column: 1/3;
+    grid-row: 1;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 27px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
+    text-transform: uppercase;
+
+}
+
+.days__temperature {
+    font-size: 80px;
+    font-weight: 600;
+    line-height: 98px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: white;
+
+}
+
+
+.days__icon  {
+    width: 66px;
+}
+
+.map {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    max-width: 375px;
+    width: 30vw;
+}
+
+.map_img {
+    width: 100%;
+    height: 400px;
+    background-image: url(../images/google.png);
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 15px;
+
+}
+
+.map__coordinates {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: right;
+    color: white;
+}
+
+
+
+
+@media (max-width: 1200px) {
+    main {
+        padding-top: 75px;
+    }
+    .title__city {
+        font-size: 40px;
+        line-height:48px;
+    
+    }
+    
+    .tittle__date {
+        font-size: 20px;
+        line-height: 25px;
+    }
+
+    .today {
+        padding: 15px 0 75px 0;
+    }
+
+    .today__temperature>p {
+        font-size: 270px;
+    }
+
+    .today__icon>img {
+        height: 180px;
+    }
+    
+    .today__details {
+        font-size: 20px;
+        line-height: 32px;
+    }
+
+    .map__img {
+        height: 350px;
+    }
+  } 
+
+  
+@media (max-width: 1024px) {
+    main {
+        padding-top: 50px;
+    }
+
+    .title__city {
+        font-size: 36px;
+        line-height:44px;
+    
+    }
+    
+    .tittle__date {
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .today {
+        padding: 15px 0 50px 0;
+    }
+
+
+    .today__temperature>p {
+        font-size: 225px;
+    }
+
+    .today__icon>img {
+        height: 150px;
+    }
+    
+    .today__details {
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .days__day-of-week {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .days__temperature {
+        font-size: 55px;
+        line-height: 70px;
+    }
+
+    .days__icon  {
+        width: 50px;
+    }
+
+    .map__img {
+        height: 300px;
+    }
+}
+
+@media (max-width:768px) {
+main {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    
+}
+
+.today {
+    width: auto;
+    padding: 15px 0 25px 0;
+    justify-content: space-around;
+}
+
+.today__temperature>p {
+    font-size: 150px;
+}
+
+.today__icon>img {
+    height: 100px;
+}
+
+.days {
+    width: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.days>div {
+width: auto;
+}
+
+.days__day-of-week {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.days__temperature {
+    font-size: 36px;
+    line-height: 55px;
+}
+
+.days__icon  {
+    width: 53px;
+}
+
+.map {
+    width: 70vw;
+    margin-top: 30px;
+}
+
+.map__coordinates {
+    font-size: 18px;
+    line-height: 26px;
+
+}
+}
+
+@media (max-width:420px) {
+
+    .title__city {
+        font-size: 26px;
+        line-height:32px;
+    
+    }
+    
+    .tittle__date {
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+    .today__temperature>p {
+        font-size: 100px;
+    }
+
+    .today__icon>img {
+        height: 75px;
+    }
+
+    .today__details {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .days {
+        flex-direction: column;
+        width: auto;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .map__img {
+        height: 200px;
+        margin-bottom: 10px;
+    }
+
+    .map__coordinates {
+        font-size: 16px;
+        line-height: 25px;
+    }
+}

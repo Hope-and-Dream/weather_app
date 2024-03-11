@@ -1,0 +1,164 @@
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.option {
+    display: flex;
+    gap: 10px;
+}
+
+.option__refresh {
+    background-image: url(../images/refresh.png);
+    background-size: cover;
+    background-color: rgba(174, 181, 185, 0.1);
+    border: none;
+    border-radius: 5px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.option__language {
+    width: 71px;
+    height: 44px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(174, 181, 185, 0.5);
+    color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    letter-spacing: 0em;
+
+}
+
+form.option__units-of-temperature {
+    width: 88px;
+    height: 44px;
+    display: flex;
+    border-radius: 5px;
+    background: rgba(174, 181, 185, 0.5);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    letter-spacing: 0em;
+
+}
+
+div.option__units-of-temperature {
+    display: inline-block;
+}
+
+div.option__units-of-temperature input[type=radio] {
+    display: none;
+}
+
+div.option__units-of-temperature label {
+    display: inline-block;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    line-height: 44px;
+    border: none;
+    user-select: none;
+    color: white;
+}
+
+/* Checked */
+div.option__units-of-temperature input[type=radio]:checked+label {
+    background: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#search {
+    display: flex;
+    width: max-content;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    letter-spacing: 0em;
+}
+
+#search>input {
+    width: 274px;
+    height: 44px;
+    border: 1px solid rgba(228, 227, 227, 0.2);
+    border-radius: 5px 0 0 5px;
+    background: rgba(76, 82, 85, 0.4);
+    color: white;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: 0em;
+
+}
+
+#search>button {
+    width: 101px;
+    height: 44px;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    background: rgba(174, 181, 185, 0.5);
+    color: white;
+}
+
+@media (max-width:768px) {
+    .option {
+        gap: 5px;
+    }
+
+    .search {
+        flex-direction: column;
+        height: max-content;
+        align-items: flex-end;
+    }
+
+    .search>input {
+        width: 125px;
+        border-radius: 5px 5px 0 5px;
+    }
+
+    .search>button {
+        width: 125px;
+        height: 30px;
+        border-radius: 5px 0 5px 5px;
+    }
+}
+
+@media (max-width:420px) {
+    .option__refresh {
+        width: 30px;
+        height: 30px;
+    }
+
+    .option__language {
+        height: 30px;
+    }
+
+    form {
+        width: 60px;
+        height: 30px;
+    }
+
+    .option__units-of-temperature label {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .search>input {
+        height: 30px;
+    }
+
+    .search>button {
+        height: 25px;
+    }
+}

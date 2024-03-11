@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+
+<body>
+    <article class="wrapper">
+        <header>
+            <div class="option">
+                <button class="option__refresh">
+                    <img src="./images/Vector.png">
+                </button>
+
+                <select class="option__language" name="language" id="language-select">
+                    <option value="en">EN</option>
+                    <option value="ru">RU</option>
+                </select>
+
+                <form action="" class="option__units-of-temperature">
+                    <div class="option__units-of-temperature">
+                        <input id="celsius" type="radio" name="unit-of-temperature" value="C" checked>
+                        <label for="celsius">°C</label>
+                    </div>
+
+                    <div class="option__units-of-temperature">
+                        <input id="fahrenheit" type="radio" name="unit-of-temperature" value="F">
+                        <label for="fahrenheit">°F</label>
+                    </div>
+                </form>
+            </div>
+            <form action="" id="search">
+                <input id="search_city" placeholder="Search city or ZIP">
+                <button type="submit" form="search">SEARCH</button>
+            </form>
+        </header>
+        <!-- <main id="main">
+            <div>
+                <div class="title">
+                    <p class="title__city">Novosibirsk<span>, Russia</span></p>
+                    <p class="tittle__date">Tue 05 march 13:31</p>
+                </div>
+                <div class="today">
+                    <div class="today__temperature">
+                        <p>-4°</p>
+                    </div>
+                    <div class="today__icon">
+                        <img src="./images/weather-static/cloudy-day-3.svg">
+                    </div>
+                    <div class="today__details">
+                        <p>overcast</p>
+                        <p>Feels like: -11°</p>
+                        <p>Wind: 10m/s </p>
+                        <p>Humidity: 77%</p>
+                    </div>
+                </div>
+                <div class="days">
+                    <div>
+                        <div class="days__day-of-week">
+                            <p>Wednesday</p>
+                        </div>
+                        <div class="days__temperature">
+                            <p>-4°</p>
+                        </div>
+                        <div class="days__icon">
+                            <img src="./images/weather-static/snowy-3.svg">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="days__day-of-week">
+                            <p>Thursday</p>
+                        </div>
+                        <div class="days__temperature">
+                            <p>-4°</p>
+                        </div>
+                        <div class="days__icon">
+                            <img src="./images/weather-static/snowy-5.svg">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="days__day-of-week">
+                            <p>Friday</p>
+                        </div>
+                        <div class="days__temperature">
+                            <p>-5°</p>
+                        </div>
+                        <div class="days__icon">
+                            <img src="./images/weather-static/snowy-4.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="map">
+                <div id="map" class="map__img">
+                    <img src="./images/google.png">
+                </div>
+                <div class="map__coordinates">
+                    <p>Широта: 53°54'</p>
+                    <p>Долгота: 27°34'</p>
+                </div>
+            </div>
+        </main> -->
+    </article>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

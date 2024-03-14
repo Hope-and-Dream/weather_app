@@ -29,6 +29,14 @@ let city;
 let currentWeather;
 let forecastWeather;
 let country;
+let latitude;
+let latitudeDegrees;
+let latitudeMinutes;
+let latitudeRes;
+let longitude;
+let longitudeDegrees;
+let longitudeMinutes;
+let longitudeRes;
 let temp_c;
 let temp_f;
 let condition_text;
@@ -47,14 +55,19 @@ let condition_second_day;
 let temp_c_third_day;
 let temp_f_third_day;
 let condition_third_day;
+let dataUrl;
 
 // функция полученися данных с API о текущей погоде
 
 async function getDataCurrent(key, location) {
-    const url_1 = `http://api.weatherapi.com/v1/current.json?key=${key}&q=${location}`;
-    const response = await fetch(url_1);
+    const url = `http://api.weatherapi.com/v1/current.json?key=${key}&q=${location}`;
+    const response = await fetch(url);
     const currentWeather = await response.json();
     country = currentWeather.location.country;
+    latitude = currentWeather.location.lat;
+    console.log(latitude);
+    longitude = currentWeather.location.lon;
+    console.log(longitude);
     temp_c = currentWeather.current.temp_c;
     temp_f = Math.round(currentWeather.current.temp_f);
     condition_text = currentWeather.current.condition.text;
@@ -68,8 +81,8 @@ async function getDataCurrent(key, location) {
 // функция полученися данных с API о погоде на 3 дня вперед
 
 async function getDataForecast(key, location) {
-    const url_1 = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${location}&days=4`;
-    const response = await fetch(url_1);
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${location}&days=4`;
+    const response = await fetch(url);
     const forecastWeather = await response.json();
     date_first_day = forecastWeather.forecast.forecastday[1].date;
     temp_c_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
@@ -82,6 +95,45 @@ async function getDataForecast(key, location) {
     temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_f);
     condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
 
+}
+
+// функция для получения карты с API (чтение данных)
+
+function readAsync(data) {
+    return new Promise(r => {
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            r(reader.result)
+        }
+        reader.readAsDataURL(data);
+    });
+}
+
+// функция для получения карты с API (запрос)
+
+async function getMap(key, latitude, longitude) {
+    const url = `https://static-maps.yandex.ru/v1?ll=${longitude},${latitude}&size=450,450&z=13&pt=37.620070,55.753630,pmwtm1~37.64,55.76363,pmwtm99&apikey=${key}`;
+    const response = await fetch(url);
+    const data = await response.blob();
+    dataUrl = await readAsync(data);
+
+}
+
+// получение широты и долготы
+
+const getLatitudeLogitude = () => {
+    latitudeDegrees = String(latitude).substring(0, 2);
+    latitudeMinutes = String(latitude).substring(4, 6);
+    longitudeDegrees = String(longitude).substring(0, 2);
+    longitudeMinutes = String(longitude).substring(4, 6);
+
+    if (latitude >= 0) {
+        latitudeRes = latitudeDegrees + "°" + latitudeMinutes + "'"
+    } else latitudeRes = "-" + latitudeDegrees + "°" + latitudeMinutes + "'"
+
+    if (latitude >= 0) {
+        longitudeRes = longitudeDegrees + "°" + longitudeMinutes + "'"
+    } else longitudeRes = "-" + longitudeDegrees + "°" + longitudeMinutes + "'"
 }
 
 // функция отрисовки HTML
@@ -143,10 +195,12 @@ function render() {
         </div>
     </div>
     <div class="map">
-        <div id="map"></div>
+        <div>
+        <img id="map" src="${dataUrl}">
+        </div>
         <div class="map__coordinates">
-            <p>Широта: 53°54'</p>
-            <p>Долгота: 27°34'</p>
+            <p>Широта: ${latitudeRes}</p>
+            <p>Долгота: ${longitudeRes}</p>
         </div>
     </div>
     </main>`
@@ -190,6 +244,8 @@ function changeUnitsOfTemperature() {
 }
 
 
+
+
 // создание стартовой страницы
 
 async function startRender() {
@@ -199,21 +255,26 @@ async function startRender() {
     console.log(city)
     await getDataCurrent(apiKey, city);
     await getDataForecast(apiKey, city);
+    await getMap(apiKeyMaps, latitude, longitude);
+    getLatitudeLogitude();
     render()
     changeUnitsOfTemperature()
 }
 
 // создание страницы по поисковому запросу
-form.onsubmit = async function searchRender (event) {
+form.onsubmit = async function searchRender(event) {
     event.preventDefault(); // отменяем отправку формы
     city = input.value.trim()
     await getDataCurrent(apiKey, city);
     await getDataForecast(apiKey, city);
+    await getMap(apiKeyMaps, latitude, longitude);
+    getLatitudeLogitude();
     render()
     changeUnitsOfTemperature()
 }
 
 startRender()
+
 
 
 

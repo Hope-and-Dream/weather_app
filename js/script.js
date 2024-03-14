@@ -203,16 +203,7 @@ async function startRender() {
     changeUnitsOfTemperature()
 }
 
-// async function searchRender() {
-//     city = input.value.trim()
-//     await getDataCurrent(apiKey, city);
-//     await getDataForecast(apiKey, city);
-//     render()
-//     changeUnitsOfTemperature()
-// }
-
-
-
+// создание страницы по поисковому запросу
 form.onsubmit = async function searchRender (event) {
     event.preventDefault(); // отменяем отправку формы
     city = input.value.trim()

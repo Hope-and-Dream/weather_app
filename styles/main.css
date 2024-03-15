@@ -43,7 +43,7 @@ main {
 }
 
 .today__temperature>p {
-    font-size: 306px;
+    font-size: 18vw;
     font-weight: 700;
     letter-spacing: 0em;
     text-align: left;
@@ -58,13 +58,13 @@ main {
 }
 
 .today__icon>img {
-    height: 220px;
+    height: 15vw;
 }
 
 .today__details {
-    font-size: 22px;
+    font-size: 1.5vw;
     font-weight: 700;
-    line-height: 37px;
+    line-height: 2.5vw;
     letter-spacing: 0em;
     text-align: left;
     color: white;
@@ -168,19 +168,6 @@ main {
         padding: 15px 0 75px 0;
     }
 
-    .today__temperature>p {
-        font-size: 270px;
-    }
-
-    .today__icon>img {
-        height: 180px;
-    }
-    
-    .today__details {
-        font-size: 20px;
-        line-height: 32px;
-    }
-
     .days__temperature {
         font-size: 65px;
         line-height: 80px;
@@ -210,20 +197,6 @@ main {
 
     .today {
         padding: 15px 0 50px 0;
-    }
-
-
-    .today__temperature>p {
-        font-size: 225px;
-    }
-
-    .today__icon>img {
-        height: 150px;
-    }
-    
-    .today__details {
-        font-size: 14px;
-        line-height: 22px;
     }
 
     .days__day-of-week {
@@ -265,8 +238,17 @@ main {
     font-size: 150px;
 }
 
+.today__icon {
+    left: 67%
+}
+
 .today__icon>img {
     height: 100px;
+}
+
+.today__details {
+    font-size: 12px;
+    line-height: 18px;
 }
 
 .days {

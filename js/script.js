@@ -7,6 +7,8 @@ const header = document.querySelector("header");
 const today = document.querySelector(".today");
 const form = document.querySelector("#search");
 const input = document.querySelector("#search_city");
+const UnitsOfTemperature = document.querySelector("#search_city");
+const options = document.getElementsByName('unit-of-temperature');
 
 // Текущая дата, переменные
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
@@ -30,12 +32,8 @@ let currentWeather;
 let forecastWeather;
 let country;
 let latitude;
-let latitudeDegrees;
-let latitudeMinutes;
 let latitudeRes;
 let longitude;
-let longitudeDegrees;
-let longitudeMinutes;
 let longitudeRes;
 let temp_c;
 let temp_f;
@@ -57,6 +55,16 @@ let temp_f_third_day;
 let condition_third_day;
 let dataUrl;
 
+// дополнительные пермененные
+
+let option_value;
+let temp;
+let feelslike;
+let temp_first_day;
+let temp_second_day;
+let temp_third_day;
+
+
 // функция полученися данных с API о текущей погоде
 
 async function getDataCurrent(key, location) {
@@ -68,6 +76,8 @@ async function getDataCurrent(key, location) {
     console.log(latitude);
     longitude = currentWeather.location.lon;
     console.log(longitude);
+    latitudeRes = String(latitude).split('.', 2);
+    longitudeRes = String(longitude).split('.', 2);
     temp_c = currentWeather.current.temp_c;
     temp_f = Math.round(currentWeather.current.temp_f);
     condition_text = currentWeather.current.condition.text;
@@ -119,23 +129,6 @@ async function getMap(key, latitude, longitude) {
 
 }
 
-// получение широты и долготы
-
-const getLatitudeLogitude = () => {
-    latitudeDegrees = String(latitude).substring(0, 2);
-    latitudeMinutes = String(latitude).substring(4, 6);
-    longitudeDegrees = String(longitude).substring(0, 2);
-    longitudeMinutes = String(longitude).substring(4, 6);
-
-    if (latitude >= 0) {
-        latitudeRes = latitudeDegrees + "°" + latitudeMinutes + "'"
-    } else latitudeRes = "-" + latitudeDegrees + "°" + latitudeMinutes + "'"
-
-    if (latitude >= 0) {
-        longitudeRes = longitudeDegrees + "°" + longitudeMinutes + "'"
-    } else longitudeRes = "-" + longitudeDegrees + "°" + longitudeMinutes + "'"
-}
-
 // функция отрисовки HTML
 function render() {
     const html = ` <main id="main">
@@ -146,14 +139,14 @@ function render() {
         </div>
         <div class="today">
             <div class="today__temperature">
-                <p id="today__temperature">${temp_c}°</p>
+                <p id="today__temperature">${temp}°</p>
             </div>
             <div class="today__icon">
                 <img src=${condition_icon}>
             </div>
             <div class="today__details">
                 <p>${condition_text}</p>
-                <p id="feelslike">Feels like: ${feelslike_c}°</p>
+                <p id="feelslike">Feels like: ${feelslike}°</p>
                 <p>Wind: ${wind}m/s </p>
                 <p>Humidity: ${humidity}%</p>
             </div>
@@ -164,7 +157,7 @@ function render() {
                     <p>${getElementAhead(1)}</p>
                 </div>
                 <div class="days__temperature">
-                    <p id="temp_first_day">${temp_c_first_day}°</p>
+                    <p id="temp_first_day">${temp_first_day}°</p>
                 </div>
                 <div class="days__icon">
                     <img src=${condition_first_day}>
@@ -175,7 +168,7 @@ function render() {
                     <p>${getElementAhead(1)}</p>
                 </div>
                 <div class="days__temperature">
-                    <p id="temp_second_day">${temp_c_second_day}°</p>
+                    <p id="temp_second_day">${temp_second_day}°</p>
                 </div>
                 <div class="days__icon">
                     <img src=${condition_second_day}>
@@ -186,7 +179,7 @@ function render() {
                     <p>${getElementAhead(1)}</p>
                 </div>
                 <div class="days__temperature">
-                    <p id="temp_third_day">${temp_c_third_day}°</p>
+                    <p id="temp_third_day">${temp_third_day}°</p>
                 </div>
                 <div class="days__icon">
                     <img src=${condition_third_day}>
@@ -199,8 +192,8 @@ function render() {
         <img id="map" src="${dataUrl}">
         </div>
         <div class="map__coordinates">
-            <p>Широта: ${latitudeRes}</p>
-            <p>Долгота: ${longitudeRes}</p>
+            <p>Широта: ${latitudeRes[0]}°${latitudeRes[1]}'</p>
+            <p>Долгота: ${longitudeRes[0]}° ${longitudeRes[1]}'</p>
         </div>
     </div>
     </main>`
@@ -212,39 +205,40 @@ function render() {
 
 // Реализация изменения единиц измерения
 function changeUnitsOfTemperature() {
-    // Получаем все радио-кнопки с выбором температурной единицы
-    const temperatureUnitRadios = document.querySelectorAll('input[name="unit-of-temperature"]');
 
     // Добавляем обработчик события на каждую радио-кнопку
-    temperatureUnitRadios.forEach(radio => {
+    options.forEach(radio => {
         radio.addEventListener('change', function () {
-            if (this.value === 'C') {
-                // Действие, если выбраны градусы Цельсия
-                console.log('Выбраны градусы Цельсия');
-                document.getElementById("today__temperature").textContent = temp_c + "°";
-                document.getElementById("feelslike").textContent = feelslike_c + "°"
-                document.getElementById("temp_first_day").textContent = temp_c_first_day + "°"
-                document.getElementById("temp_second_day").textContent = temp_c_second_day + "°"
-                document.getElementById("temp_third_day").textContent = temp_c_third_day + "°"
-
-
-            } else if (this.value === 'F') {
-                // Действие, если выбраны градусы Фаренгейта
-                console.log('Выбраны градусы Фаренгейта');
-                document.getElementById("today__temperature").textContent = temp_f + "°";
-                document.getElementById("feelslike").textContent = feelslike_f + "°"
-                document.getElementById("temp_first_day").textContent = temp_f_first_day + "°"
-                document.getElementById("temp_second_day").textContent = temp_f_second_day + "°"
-                document.getElementById("temp_third_day").textContent = temp_f_third_day + "°"
-
-
-            }
+            temperatureValue()
+            render()
         })
     })
 }
 
 
+// определение текущих единиц измерения
 
+const temperatureValue = () => {
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+            option_value = options[i].value;
+            break;
+        }
+    }
+    if (option_value === "C") {
+        temp = temp_c;
+        feelslike = feelslike_c;
+        temp_first_day = temp_c_first_day;
+        temp_second_day = temp_c_second_day;
+        temp_third_day = temp_c_third_day;
+    } else if (option_value === "F") {
+        temp = temp_f;
+        feelslike = feelslike_f;
+        temp_first_day = temp_f_first_day;
+        temp_second_day = temp_f_second_day;
+        temp_third_day = temp_f_third_day;
+    }
+}
 
 // создание стартовой страницы
 
@@ -256,7 +250,7 @@ async function startRender() {
     await getDataCurrent(apiKey, city);
     await getDataForecast(apiKey, city);
     await getMap(apiKeyMaps, latitude, longitude);
-    getLatitudeLogitude();
+    temperatureValue();
     render()
     changeUnitsOfTemperature()
 }
@@ -268,12 +262,14 @@ form.onsubmit = async function searchRender(event) {
     await getDataCurrent(apiKey, city);
     await getDataForecast(apiKey, city);
     await getMap(apiKeyMaps, latitude, longitude);
-    getLatitudeLogitude();
+    console.log(temp_c)
+    temperatureValue();
     render()
     changeUnitsOfTemperature()
 }
 
 startRender()
+
 
 
 

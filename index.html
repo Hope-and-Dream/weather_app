@@ -15,34 +15,36 @@
 
 <body>
     <article class="wrapper">
-        <header>
-            <div class="option">
-                <button class="option__refresh">
-                    <img src="./images/Vector.png">
-                </button>
+        <div class="background">
+            <header>
+                <div class="option">
+                    <button class="option__refresh">
+                        <img src="./images/Vector.png">
+                    </button>
 
-                <select class="option__language" name="language" id="language-select">
-                    <option value="en">EN</option>
-                    <option value="ru">RU</option>
-                </select>
+                    <select class="option__language" name="language" id="language-select">
+                        <option value="en">EN</option>
+                        <option value="ru">RU</option>
+                    </select>
 
-                <form action="" class="option__units-of-temperature">
-                    <div class="option__units-of-temperature">
-                        <input id="celsius" type="radio" name="unit-of-temperature" value="C" checked>
-                        <label for="celsius">°C</label>
-                    </div>
+                    <form action="" class="option__units-of-temperature">
+                        <div class="option__units-of-temperature">
+                            <input id="celsius" type="radio" name="unit-of-temperature" value="C" checked>
+                            <label for="celsius">°C</label>
+                        </div>
 
-                    <div class="option__units-of-temperature">
-                        <input id="fahrenheit" type="radio" name="unit-of-temperature" value="F">
-                        <label for="fahrenheit">°F</label>
-                    </div>
+                        <div class="option__units-of-temperature">
+                            <input id="fahrenheit" type="radio" name="unit-of-temperature" value="F">
+                            <label for="fahrenheit">°F</label>
+                        </div>
+                    </form>
+                </div>
+                <form action="" id="search">
+                    <input id="search_city" placeholder="Search city...">
+                    <button type="submit" form="search">SEARCH</button>
                 </form>
-            </div>
-            <form action="" id="search">
-                <input id="search_city" placeholder="Search city or ZIP">
-                <button type="submit" form="search">SEARCH</button>
-            </form>
-        </header>
+            </header>
+        </div>
     </article>
     <script src="js/script.js"></script>
 </body>

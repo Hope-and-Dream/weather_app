@@ -48,6 +48,7 @@ main {
     letter-spacing: 0em;
     text-align: left;
     color: white;
+    margin-top: 3vw;
 
 }
 
@@ -239,7 +240,9 @@ main {
 }
 
 .today__icon {
-    left: 67%
+    position: absolute;
+    top: 0px;
+    left: 60%
 }
 
 .today__icon>img {

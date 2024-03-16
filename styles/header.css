@@ -22,14 +22,14 @@ header {
 }
 
 .option__language {
-    width: 71px;
+    width: 75px;
     height: 44px;
     border: none;
     border-radius: 5px;
     background-color: rgba(174, 181, 185, 0.5);
     color: white;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
     font-size: 14px;
     font-weight: 700;
     line-height: 17px;
@@ -99,6 +99,10 @@ div.option__units-of-temperature input[type=radio]:checked+label {
     line-height: 17px;
     letter-spacing: 0em;
 
+}
+
+#search>input::placeholder {
+    color: white;
 }
 
 #search>button {

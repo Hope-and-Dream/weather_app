@@ -5,19 +5,14 @@
     font-family: Montserrat;
 }
 
-.wrapper {
-    max-width: 1440px;
-    /* background-image: url(../images/gradient.png); */
-    background-size: cover;
-    background-color: rgba(17, 17, 46, 1);
-    padding: 90px
-}
 
-/* .clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-} */
+.wrapper {
+    max-width: 1440px; 
+    background-size: cover;
+    padding: 90px;
+    background-color: rgba(17, 17, 46,0.5);
+    background-blend-mode: multiply;
+}
 
 @media (max-width: 1200px) {
     .wrapper {

@@ -1,14 +1,17 @@
 // API ключи
 const apiKey = '176d1ae515e54fd4a0492612241003';
 const apiKeyMaps = "a8c3d368-25c9-4b94-a57a-e93a32c8c939";
+const apiKeyImg = "XvnEjzHMF292wkP5tfGbG2EYSvR4oltEGK6mJ-qG5bM";
 
 //  HTML элементы
+const wrapper = document.querySelector(".wrapper")
 const header = document.querySelector("header");
+const refreshBackground = document.querySelector(".option__refresh")
 const today = document.querySelector(".today");
 const form = document.querySelector("#search");
 const input = document.querySelector("#search_city");
 const UnitsOfTemperature = document.querySelector("#search_city");
-const options = document.getElementsByName('unit-of-temperature');
+const options = document.querySelectorAll('input[name="unit-of-temperature"]');
 
 // Текущая дата, переменные
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
@@ -53,7 +56,8 @@ let condition_second_day;
 let temp_c_third_day;
 let temp_f_third_day;
 let condition_third_day;
-let dataUrl;
+let dataUrlMap;
+let dataUrlImg;
 
 // дополнительные пермененные
 
@@ -125,8 +129,18 @@ async function getMap(key, latitude, longitude) {
     const url = `https://static-maps.yandex.ru/v1?ll=${longitude},${latitude}&size=450,450&z=13&pt=37.620070,55.753630,pmwtm1~37.64,55.76363,pmwtm99&apikey=${key}`;
     const response = await fetch(url);
     const data = await response.blob();
-    dataUrl = await readAsync(data);
+    dataUrlMap = await readAsync(data);
 
+}
+
+// функция для получения фона
+
+async function getImg(key) {
+    const url = `https://api.unsplash.com//photos/random/?client_id=${key}&topic=nature`;
+    const response = await fetch(url);
+    const data = await response.json();
+    dataUrlImg = data.urls.regular;
+    wrapper.style.backgroundImage  = `url(${dataUrlImg})`
 }
 
 // функция отрисовки HTML
@@ -189,7 +203,7 @@ function render() {
     </div>
     <div class="map">
         <div>
-        <img id="map" src="${dataUrl}">
+        <img id="map" src="${dataUrlMap}">
         </div>
         <div class="map__coordinates">
             <p>Широта: ${latitudeRes[0]}°${latitudeRes[1]}'</p>
@@ -214,6 +228,15 @@ function changeUnitsOfTemperature() {
         })
     })
 }
+
+// реализация смена фона по нажатию кнопки
+
+refreshBackground.addEventListener('click', async function() {
+    await getImg(apiKeyImg);
+    console.log(refreshBackground)
+    wrapper.style.backgroundImage  = `url(${dataUrlImg})`
+})
+
 
 
 // определение текущих единиц измерения
@@ -251,7 +274,8 @@ async function startRender() {
     await getDataForecast(apiKey, city);
     await getMap(apiKeyMaps, latitude, longitude);
     temperatureValue();
-    render()
+    await getImg(apiKeyImg);
+    render();
     changeUnitsOfTemperature()
 }
 
@@ -264,11 +288,13 @@ form.onsubmit = async function searchRender(event) {
     await getMap(apiKeyMaps, latitude, longitude);
     console.log(temp_c)
     temperatureValue();
-    render()
-    changeUnitsOfTemperature()
+    await getImg(apiKeyImg);
+    render();
+    changeUnitsOfTemperature();
 }
 
 startRender()
+
 
 
 

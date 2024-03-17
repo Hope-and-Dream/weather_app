@@ -16,12 +16,20 @@ const options = document.querySelectorAll('input[name="unit-of-temperature"]');
 // Текущая дата, переменные
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-let date = new Date();
-let currentDay = date.getDay();
-let currentDate = date.getDate();
-let currentMonth = date.getMonth();
-let currentHours = date.getHours();
-let currentMinutes = date.getMinutes();
+let date;
+console.log(date)
+let currentDay;
+let currentDate;
+let currentMonth;
+let currentHours;
+let currentMinutes;
+// let date;
+// let currentYear;
+// let currentMonth;
+// let currentDate;
+// let currentHours;
+// let currentMinutes;
+// let currentDay;
 // функция определения дня недели на следующие три дня
 function getElementAhead(positions) {
     const nextDay = (currentDay + positions) % days.length;
@@ -77,9 +85,7 @@ async function getDataCurrent(key, location) {
     const currentWeather = await response.json();
     country = currentWeather.location.country;
     latitude = currentWeather.location.lat;
-    console.log(latitude);
     longitude = currentWeather.location.lon;
-    console.log(longitude);
     latitudeRes = String(latitude).split('.', 2);
     longitudeRes = String(longitude).split('.', 2);
     temp_c = currentWeather.current.temp_c;
@@ -136,12 +142,14 @@ async function getMap(key, latitude, longitude) {
 // функция для получения фона
 
 async function getImg(key) {
-    const url = `https://api.unsplash.com//photos/random/?client_id=${key}&topic=nature`;
+    const url = `https://api.unsplash.com//photos/random?query=nature&orientation=landscape&client_id=${key}`;
     const response = await fetch(url);
     const data = await response.json();
+    console.log(data)
     dataUrlImg = data.urls.regular;
-    wrapper.style.backgroundImage  = `url(${dataUrlImg})`
+    wrapper.style.backgroundImage = `url(${dataUrlImg})`
 }
+
 
 // функция отрисовки HTML
 function render() {
@@ -149,6 +157,7 @@ function render() {
     <div>
         <div class="title">
             <p class="title__city">${city}<span>, ${country}</span></p>
+
             <p class="tittle__date">${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}</p>
         </div>
         <div class="today">
@@ -231,12 +240,29 @@ function changeUnitsOfTemperature() {
 
 // реализация смена фона по нажатию кнопки
 
-refreshBackground.addEventListener('click', async function() {
+refreshBackground.addEventListener('click', async function () {
     await getImg(apiKeyImg);
     console.log(refreshBackground)
-    wrapper.style.backgroundImage  = `url(${dataUrlImg})`
+    wrapper.style.backgroundImage = `url(${dataUrlImg})`
 })
 
+
+// функция даты, времени и дня недели
+const currentTime = () => {
+    // currentYear = date.substring(0, 4);
+    // currentMonth = date.substring(5, 7).replace("0", "");
+    // currentDate = date.substring(8, 10);
+    // currentHours = date.substring(11, 13);
+    // currentMinutes = date.substring(14);
+    // let date2 = new Date(currentYear, currentMonth, currentDate)
+    // currentDay = date2.getDay()
+    date = new Date();
+    currentDay = date.getDay();
+    currentDate = date.getDate();
+    currentMonth = date.getMonth();
+    currentHours = date.getHours();
+    currentMinutes = date.getMinutes();
+}
 
 
 // определение текущих единиц измерения
@@ -275,8 +301,17 @@ async function startRender() {
     await getMap(apiKeyMaps, latitude, longitude);
     temperatureValue();
     await getImg(apiKeyImg);
+    currentTime();
     render();
     changeUnitsOfTemperature()
+    setInterval(async () => {
+        const tittleDate = document.querySelector(".tittle__date")
+        await getDataCurrent(apiKey, city);
+        console.log(date)
+        currentTime()
+        tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
+    }, 1000)
+
 }
 
 // создание страницы по поисковому запросу
@@ -289,8 +324,14 @@ form.onsubmit = async function searchRender(event) {
     console.log(temp_c)
     temperatureValue();
     await getImg(apiKeyImg);
+    currentTime();
     render();
     changeUnitsOfTemperature();
+    setTimeout(() => {
+        currentTime()
+        tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
+    }, 1000)
+
 }
 
 startRender()

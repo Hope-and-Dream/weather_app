@@ -17,20 +17,12 @@ const options = document.querySelectorAll('input[name="unit-of-temperature"]');
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 let date;
-console.log(date)
 let currentDay;
 let currentDate;
 let currentMonth;
 let currentHours;
 let currentMinutes;
-// let date;
-// let currentYear;
-// let currentMonth;
-// let currentDate;
-// let currentHours;
-// let currentMinutes;
-// let currentDay;
-// функция определения дня недели на следующие три дня
+
 function getElementAhead(positions) {
     const nextDay = (currentDay + positions) % days.length;
     currentDay = nextDay;
@@ -42,6 +34,8 @@ let city;
 let currentWeather;
 let forecastWeather;
 let country;
+let cityName;
+let time;
 let latitude;
 let latitudeRes;
 let longitude;
@@ -75,6 +69,8 @@ let feelslike;
 let temp_first_day;
 let temp_second_day;
 let temp_third_day;
+let UpdateTime;
+let cityCurrent;
 
 
 // функция полученися данных с API о текущей погоде
@@ -83,7 +79,10 @@ async function getDataCurrent(key, location) {
     const url = `http://api.weatherapi.com/v1/current.json?key=${key}&q=${location}`;
     const response = await fetch(url);
     const currentWeather = await response.json();
+    console.log(currentWeather)
     country = currentWeather.location.country;
+    cityName = currentWeather.location.name;
+
     latitude = currentWeather.location.lat;
     longitude = currentWeather.location.lon;
     latitudeRes = String(latitude).split('.', 2);
@@ -239,7 +238,6 @@ function changeUnitsOfTemperature() {
 }
 
 // реализация смена фона по нажатию кнопки
-
 refreshBackground.addEventListener('click', async function () {
     await getImg(apiKeyImg);
     console.log(refreshBackground)
@@ -249,21 +247,19 @@ refreshBackground.addEventListener('click', async function () {
 
 // функция даты, времени и дня недели
 const currentTime = () => {
-    // currentYear = date.substring(0, 4);
-    // currentMonth = date.substring(5, 7).replace("0", "");
-    // currentDate = date.substring(8, 10);
-    // currentHours = date.substring(11, 13);
-    // currentMinutes = date.substring(14);
-    // let date2 = new Date(currentYear, currentMonth, currentDate)
-    // currentDay = date2.getDay()
-    date = new Date();
+    date = new Date()
     currentDay = date.getDay();
     currentDate = date.getDate();
     currentMonth = date.getMonth();
     currentHours = date.getHours();
     currentMinutes = date.getMinutes();
+    if (String(currentMinutes).length === 1) {
+        currentMinutes = "0" + currentMinutes
+    }
+    if (String(currentHours).length === 1) {
+        currentHours = "0" + currentHours
+    }
 }
-
 
 // определение текущих единиц измерения
 
@@ -303,37 +299,50 @@ async function startRender() {
     await getImg(apiKeyImg);
     currentTime();
     render();
+    cityCurrent = city;
     changeUnitsOfTemperature()
-    setInterval(async () => {
+    UpdateTime = setInterval(async () => {
         const tittleDate = document.querySelector(".tittle__date")
         await getDataCurrent(apiKey, city);
         console.log(date)
         currentTime()
         tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
     }, 1000)
-
 }
 
 // создание страницы по поисковому запросу
 form.onsubmit = async function searchRender(event) {
     event.preventDefault(); // отменяем отправку формы
     city = input.value.trim()
-    await getDataCurrent(apiKey, city);
-    await getDataForecast(apiKey, city);
-    await getMap(apiKeyMaps, latitude, longitude);
-    console.log(temp_c)
+    try {
+        await getDataCurrent(apiKey, city);
+        await getDataForecast(apiKey, city);
+        await getMap(apiKeyMaps, latitude, longitude);
+    } catch (error) {
+        alert("Проверьте правильность ввода");
+        console.log(error)
+        input.value = '';
+        city = cityCurrent;
+        UpdateTime = setInterval(async () => {
+            const tittleDate = document.querySelector(".tittle__date")
+            await getDataCurrent(apiKey, city);
+            currentTime()
+            tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
+            console.log(date)
+        }, 1000)
+    }
+    cityCurrent = city;
     temperatureValue();
     await getImg(apiKeyImg);
     currentTime();
     render();
     changeUnitsOfTemperature();
-    setTimeout(() => {
+    UpdateTime = setInterval(() => {
         currentTime()
+        const tittleDate = document.querySelector(".tittle__date")
         tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
     }, 1000)
-
 }
-
 startRender()
 
 

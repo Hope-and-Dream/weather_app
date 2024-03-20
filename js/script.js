@@ -16,12 +16,7 @@ const options = document.querySelectorAll('input[name="unit-of-temperature"]');
 // Текущая дата, переменные
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fryday', 'Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-let date;
-let currentDay;
-let currentDate;
-let currentMonth;
-let currentHours;
-let currentMinutes;
+let date, currentDay, currentDate, currentMonth, currentHours, currentMinutes;
 
 function getElementAhead(positions) {
     const nextDay = (currentDay + positions) % days.length;
@@ -71,6 +66,7 @@ let temp_second_day;
 let temp_third_day;
 let UpdateTime;
 let cityCurrent;
+let cityDate, cityYear, cityMonth, cityDay, cityHours
 
 
 // функция полученися данных с API о текущей погоде
@@ -82,7 +78,7 @@ async function getDataCurrent(key, location) {
     console.log(currentWeather)
     country = currentWeather.location.country;
     cityName = currentWeather.location.name;
-
+    cityDate = currentWeather.location.localtime;
     latitude = currentWeather.location.lat;
     longitude = currentWeather.location.lon;
     latitudeRes = String(latitude).split('.', 2);
@@ -144,7 +140,7 @@ async function getImg(key) {
     const url = `https://api.unsplash.com//photos/random?query=nature&orientation=landscape&client_id=${key}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
     dataUrlImg = data.urls.regular;
     wrapper.style.backgroundImage = `url(${dataUrlImg})`
 }
@@ -240,17 +236,19 @@ function changeUnitsOfTemperature() {
 // реализация смена фона по нажатию кнопки
 refreshBackground.addEventListener('click', async function () {
     await getImg(apiKeyImg);
-    console.log(refreshBackground)
+    // console.log(refreshBackground)
     wrapper.style.backgroundImage = `url(${dataUrlImg})`
 })
 
 
-// функция даты, времени и дня недели
+// функция даты, времени и дня недели в локации пользователя
 const currentTime = () => {
     date = new Date()
+    // console.log(date)
     currentDay = date.getDay();
     currentDate = date.getDate();
     currentMonth = date.getMonth();
+    console.log(currentMonth)
     currentHours = date.getHours();
     currentMinutes = date.getMinutes();
     if (String(currentMinutes).length === 1) {
@@ -259,6 +257,33 @@ const currentTime = () => {
     if (String(currentHours).length === 1) {
         currentHours = "0" + currentHours
     }
+}
+
+//функция даты, времени и дня недели в локации по поиску
+
+const currentCityTime = () => {
+    // console.log("дата локации поиска")
+    const currentYear = String(cityDate).slice(0, 4);
+    currentMonth = String(cityDate).slice(5, 7)-1;
+    console.log(currentMonth);
+    if(String(currentMonth).startsWith('0')) {
+        currentMonth = String(currentMonth).slice(1);
+    } 
+    console.log(currentMonth)
+    currentDate = String(cityDate).slice(8, 10);
+    date = new Date()
+    currentMinutes = date.getMinutes();
+    date = new Date(currentYear, currentMonth, currentDate)
+    currentDay = date.getDay();
+    currentHours = String(cityDate).slice(11, 13);
+    if (String(currentMinutes).length === 1) {
+        currentMinutes = "0" + currentMinutes
+    }
+    if (String(currentHours).length === 1) {
+        currentHours = "0" + currentHours
+    }
+    // console.log(currentHours)
+
 }
 
 // определение текущих единиц измерения
@@ -291,20 +316,21 @@ async function startRender() {
     const response = await fetch("https://ipinfo.io/json?token=9bc0959d79615f");
     const jsonResponse = await response.json();
     city = jsonResponse.city;
-    console.log(city)
+    // console.log(city)
     await getDataCurrent(apiKey, city);
     await getDataForecast(apiKey, city);
     await getMap(apiKeyMaps, latitude, longitude);
     temperatureValue();
-    await getImg(apiKeyImg);
+    // await getImg(apiKeyImg);
     currentTime();
     render();
     cityCurrent = city;
     changeUnitsOfTemperature()
     UpdateTime = setInterval(async () => {
+        console.log("Таймер для последнего местоположения")
         const tittleDate = document.querySelector(".tittle__date")
         await getDataCurrent(apiKey, city);
-        console.log(date)
+        // console.log(date)
         currentTime()
         tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
     }, 1000)
@@ -318,27 +344,31 @@ form.onsubmit = async function searchRender(event) {
         await getDataCurrent(apiKey, city);
         await getDataForecast(apiKey, city);
         await getMap(apiKeyMaps, latitude, longitude);
+        // await getImg(apiKeyImg);
     } catch (error) {
         alert("Проверьте правильность ввода");
         console.log(error)
         input.value = '';
         city = cityCurrent;
+        clearTimeout(UpdateTime);
         UpdateTime = setInterval(async () => {
+            console.log("Таймер для последнего местоположения при ошибочном вводе")
             const tittleDate = document.querySelector(".tittle__date")
             await getDataCurrent(apiKey, city);
             currentTime()
             tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
-            console.log(date)
+            // console.log(date)
         }, 1000)
     }
     cityCurrent = city;
     temperatureValue();
-    await getImg(apiKeyImg);
-    currentTime();
+    currentCityTime();
     render();
     changeUnitsOfTemperature();
+    clearTimeout(UpdateTime);
     UpdateTime = setInterval(() => {
-        currentTime()
+        console.log("Таймер для местоположения по поиску")
+        currentCityTime();
         const tittleDate = document.querySelector(".tittle__date")
         tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
     }, 1000)

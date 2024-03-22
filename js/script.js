@@ -85,7 +85,6 @@ function getDataCurrent(key, location) {
                     return [4 /*yield*/, response.json()];
                 case 2:
                     currentWeather = _a.sent();
-                    console.log(currentWeather);
                     country = currentWeather.location.country;
                     cityName = currentWeather.location.name;
                     cityDate = currentWeather.location.localtime;
@@ -161,7 +160,6 @@ function getMap(key, latitude, longitude) {
                     return [4 /*yield*/, readAsync(data)];
                 case 3:
                     dataUrlMap = _a.sent();
-                    console.log(dataUrlMap);
                     return [2 /*return*/];
             }
         });
@@ -181,7 +179,6 @@ function getImg(key) {
                     return [4 /*yield*/, response.json()];
                 case 2:
                     data = _a.sent();
-                    // console.log(data)
                     dataUrlImg = data.urls.regular;
                     wrapper.style.backgroundImage = "url(".concat(dataUrlImg, ")");
                     return [2 /*return*/];
@@ -203,6 +200,7 @@ function changeUnitsOfTemperature() {
     // Добавляем обработчик события на каждую радио-кнопку
     options.forEach(function (radio) {
         radio.addEventListener('change', function () {
+            // clearTimeout(UpdateTime);
             temperatureValue();
             render();
         });
@@ -213,7 +211,6 @@ refreshBackground.addEventListener('click', function () {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             // await getImg(apiKeyImg);
-            // console.log(refreshBackground)
             wrapper.style.backgroundImage = "url(".concat(dataUrlImg, ")");
             return [2 /*return*/];
         });
@@ -222,11 +219,9 @@ refreshBackground.addEventListener('click', function () {
 // функция даты, времени и дня недели в локации пользователя
 var currentTime = function () {
     date = new Date();
-    // console.log(date)
     currentDay = date.getDay();
     currentDate = date.getDate();
     currentMonth = date.getMonth();
-    console.log(currentMonth);
     currentHours = date.getHours();
     currentMinutes = date.getMinutes();
     if (String(currentMinutes).length === 1) {
@@ -238,8 +233,6 @@ var currentTime = function () {
 };
 //функция даты, времени и дня недели в локации по поиску
 var currentCityTime = function () {
-    // console.log("дата локации поиска")
-    console.log(cityDate + "дата полученная из API");
     var currentYear = String(cityDate).slice(0, 4);
     currentMonth = Number(cityDate.slice(5, 7)) - 1;
     if (String(currentMonth).startsWith('0')) {
@@ -295,10 +288,8 @@ function startRender() {
                 case 2:
                     jsonResponse = _a.sent();
                     city = jsonResponse.city;
-                    // console.log(city)
                     return [4 /*yield*/, getDataCurrent(apiKey, city)];
                 case 3:
-                    // console.log(city)
                     _a.sent();
                     return [4 /*yield*/, getDataForecast(apiKey, city)];
                 case 4:
@@ -321,7 +312,6 @@ function startRender() {
                                     return [4 /*yield*/, getDataCurrent(apiKey, city)];
                                 case 1:
                                     _a.sent();
-                                    // console.log(date)
                                     currentTime();
                                     tittleDate.textContent = "".concat(days[currentDay].substring(0, 3), " ").concat(currentDate, " ").concat(months[currentMonth], " ").concat(currentHours, ":").concat(currentMinutes);
                                     return [2 /*return*/];

@@ -104,7 +104,6 @@ async function getDataCurrent(key:string, location:string) {
     const url = `http://api.weatherapi.com/v1/current.json?key=${key}&q=${location}`;
     const response = await fetch(url);
     const currentWeather = await response.json();
-    console.log(currentWeather)
     country = currentWeather.location.country;
     cityName = currentWeather.location.name;
     cityDate = currentWeather.location.localtime;
@@ -159,7 +158,6 @@ async function getMap(key:string, latitude: number, longitude:number) {
     const response = await fetch(url);
     const data = await response.blob();
     dataUrlMap = await readAsync(data);
-    console.log(dataUrlMap)
     
 
 }
@@ -170,7 +168,6 @@ async function getImg(key:string) {
     const url = `https://api.unsplash.com//photos/random?query=nature&orientation=landscape&client_id=${key}`;
     const response = await fetch(url);
     const data = await response.json();
-    // console.log(data)
     dataUrlImg = data.urls.regular;
     wrapper.style.backgroundImage = `url(${dataUrlImg})`
 }
@@ -253,10 +250,10 @@ function render() {
 
 // Реализация изменения единиц измерения
 function changeUnitsOfTemperature() {
-
     // Добавляем обработчик события на каждую радио-кнопку
     options.forEach(radio => {
         radio.addEventListener('change', function () {
+            // clearTimeout(UpdateTime);
             temperatureValue()
             render()
         })
@@ -266,7 +263,6 @@ function changeUnitsOfTemperature() {
 // реализация смена фона по нажатию кнопки
 refreshBackground.addEventListener('click', async function () {
     // await getImg(apiKeyImg);
-    // console.log(refreshBackground)
     wrapper.style.backgroundImage = `url(${dataUrlImg})`
 })
 
@@ -274,11 +270,9 @@ refreshBackground.addEventListener('click', async function () {
 // функция даты, времени и дня недели в локации пользователя
 const currentTime = () => {
     date = new Date()
-    // console.log(date)
     currentDay = date.getDay();
     currentDate = date.getDate();
     currentMonth = date.getMonth();
-    console.log(currentMonth)
     currentHours = date.getHours();
     currentMinutes = date.getMinutes();
     if (String(currentMinutes).length === 1) {
@@ -292,8 +286,6 @@ const currentTime = () => {
 //функция даты, времени и дня недели в локации по поиску
 
 const currentCityTime = () => {
-    // console.log("дата локации поиска")
-    console.log(cityDate + "дата полученная из API");
     const currentYear = String(cityDate).slice(0, 4);
     currentMonth = Number(cityDate.slice(5, 7))-1;
     if (String(currentMonth).startsWith('0')) {
@@ -344,7 +336,6 @@ async function startRender() {
     const response = await fetch("https://ipinfo.io/json?token=9bc0959d79615f");
     const jsonResponse = await response.json();
     city = jsonResponse.city;
-    // console.log(city)
     await getDataCurrent(apiKey, city);
     await getDataForecast(apiKey, city);
     await getMap(apiKeyMaps, latitude, longitude);
@@ -358,7 +349,6 @@ async function startRender() {
         // console.log("Таймер для последнего местоположения")
         const tittleDate = document.querySelector(".tittle__date") as HTMLElement;
         await getDataCurrent(apiKey, city);
-        // console.log(date)
         currentTime()
         tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
     }, 1000)
@@ -385,7 +375,6 @@ form.onsubmit = async function searchRender(event) {
             await getDataCurrent(apiKey, city);
             currentTime()
             tittleDate.textContent = `${days[currentDay].substring(0, 3)} ${currentDate} ${months[currentMonth]} ${currentHours}:${currentMinutes}`
-            // console.log(date)
         }, 1000)
     }
     cityCurrent = city;
@@ -402,9 +391,3 @@ form.onsubmit = async function searchRender(event) {
     }, 1000)
 }
 startRender()
-
-
-
-
-
-

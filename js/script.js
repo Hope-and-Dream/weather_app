@@ -188,24 +188,51 @@ function getImg(key) {
 }
 // функция отрисовки HTML
 function render() {
+    console.log("день в начале функции рендер " + currentDay);
     var html = " <main id=\"main\">\n    <div>\n        <div class=\"title\">\n            <p class=\"title__city\">".concat(city, "<span>, ").concat(country, "</span></p>\n\n            <p class=\"tittle__date\">").concat(days[currentDay].substring(0, 3), " ").concat(currentDate, " ").concat(months[currentMonth], " ").concat(currentHours, ":").concat(currentMinutes, "</p>\n        </div>\n        <div class=\"today\">\n            <div class=\"today__temperature\">\n                <p id=\"today__temperature\">").concat(temp, "\u00B0</p>\n            </div>\n            <div class=\"today__icon\">\n                <img src=").concat(condition_icon, ">\n            </div>\n            <div class=\"today__details\">\n                <p>").concat(condition_text, "</p>\n                <p id=\"feelslike\">Feels like: ").concat(feelslike, "\u00B0</p>\n                <p>Wind: ").concat(wind, "m/s </p>\n                <p>Humidity: ").concat(humidity, "%</p>\n            </div>\n        </div>\n        <div class=\"days\">\n            <div>\n                <div class=\"days__day-of-week\">\n                    <p>").concat(getElementAhead(1), "</p>\n                </div>\n                <div class=\"days__temperature\">\n                    <p id=\"temp_first_day\">").concat(temp_first_day, "\u00B0</p>\n                </div>\n                <div class=\"days__icon\">\n                    <img src=").concat(condition_first_day, ">\n                </div>\n            </div>\n            <div>\n                <div class=\"days__day-of-week\">\n                    <p>").concat(getElementAhead(1), "</p>\n                </div>\n                <div class=\"days__temperature\">\n                    <p id=\"temp_second_day\">").concat(temp_second_day, "\u00B0</p>\n                </div>\n                <div class=\"days__icon\">\n                    <img src=").concat(condition_second_day, ">\n                </div>\n            </div>\n            <div>\n                <div class=\"days__day-of-week\">\n                    <p>").concat(getElementAhead(1), "</p>\n                </div>\n                <div class=\"days__temperature\">\n                    <p id=\"temp_third_day\">").concat(temp_third_day, "\u00B0</p>\n                </div>\n                <div class=\"days__icon\">\n                    <img src=").concat(condition_third_day, ">\n                </div>\n            </div>\n        </div>\n    </div>\n    <div class=\"map\">\n        <div>\n        <img id=\"map\" src=\"").concat(dataUrlMap, "\">\n        </div>\n        <div class=\"map__coordinates\">\n            <p>\u0428\u0438\u0440\u043E\u0442\u0430: ").concat(latitudeRes[0], "\u00B0").concat(latitudeRes[1], "'</p>\n            <p>\u0414\u043E\u043B\u0433\u043E\u0442\u0430: ").concat(longitudeRes[0], "\u00B0 ").concat(longitudeRes[1], "'</p>\n        </div>\n    </div>\n    </main>");
+    console.log("день в конце функции рендер " + currentDay);
     var prev_data = document.querySelector('#main');
     if (prev_data)
         prev_data.remove();
     header.insertAdjacentHTML('afterend', html);
-    input.value = '';
+    // input.value = ''
+    console.log("день в самом конце функции рендер " + currentDay);
 }
 // Реализация изменения единиц измерения
 function changeUnitsOfTemperature() {
     // Добавляем обработчик события на каждую радио-кнопку
     options.forEach(function (radio) {
         radio.addEventListener('change', function () {
-            // clearTimeout(UpdateTime);
             temperatureValue();
             render();
+            console.log("отрисовка после изменения температуры произошла");
         });
     });
 }
+// определение текущих единиц измерения
+var temperatureValue = function () {
+    for (var i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+            option_value = options[i].value;
+            break;
+        }
+    }
+    if (option_value === "C") {
+        temp = temp_c;
+        feelslike = feelslike_c;
+        temp_first_day = temp_c_first_day;
+        temp_second_day = temp_c_second_day;
+        temp_third_day = temp_c_third_day;
+    }
+    else if (option_value === "F") {
+        temp = temp_f;
+        feelslike = feelslike_f;
+        temp_first_day = temp_f_first_day;
+        temp_second_day = temp_f_second_day;
+        temp_third_day = temp_f_third_day;
+    }
+    console.log("расчитаны все температуры");
+};
 // реализация смена фона по нажатию кнопки
 refreshBackground.addEventListener('click', function () {
     return __awaiter(this, void 0, void 0, function () {
@@ -230,6 +257,7 @@ var currentTime = function () {
     if (String(currentHours).length === 1) {
         currentHours = Number("0" + currentHours);
     }
+    console.log("текущее время пользователя определено");
 };
 //функция даты, времени и дня недели в локации по поиску
 var currentCityTime = function () {
@@ -250,29 +278,7 @@ var currentCityTime = function () {
     if (String(currentHours).endsWith(':')) {
         currentHours = Number("0" + String(currentHours).slice(0, 1));
     }
-};
-// определение текущих единиц измерения
-var temperatureValue = function () {
-    for (var i = 0; i < options.length; i++) {
-        if (options[i].checked) {
-            option_value = options[i].value;
-            break;
-        }
-    }
-    if (option_value === "C") {
-        temp = temp_c;
-        feelslike = feelslike_c;
-        temp_first_day = temp_c_first_day;
-        temp_second_day = temp_c_second_day;
-        temp_third_day = temp_c_third_day;
-    }
-    else if (option_value === "F") {
-        temp = temp_f;
-        feelslike = feelslike_f;
-        temp_first_day = temp_f_first_day;
-        temp_second_day = temp_f_second_day;
-        temp_third_day = temp_f_third_day;
-    }
+    console.log("текущее время в городе поиска определено");
 };
 // создание стартовой страницы
 function startRender() {

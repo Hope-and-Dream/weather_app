@@ -175,6 +175,7 @@ async function getImg(key:string) {
 
 // функция отрисовки HTML
 function render() {
+    console.log("день в начале функции рендер " + currentDay)
     const html = ` <main id="main">
     <div>
         <div class="title">
@@ -242,10 +243,12 @@ function render() {
         </div>
     </div>
     </main>`
+    console.log("день в конце функции рендер " + currentDay)
     const prev_data = document.querySelector('#main');
     if (prev_data) prev_data.remove();
     header.insertAdjacentHTML('afterend', html)
-    input.value = ''
+    // input.value = ''
+    console.log("день в самом конце функции рендер " + currentDay)
 }
 
 // Реализация изменения единиц измерения
@@ -253,57 +256,11 @@ function changeUnitsOfTemperature() {
     // Добавляем обработчик события на каждую радио-кнопку
     options.forEach(radio => {
         radio.addEventListener('change', function () {
-            // clearTimeout(UpdateTime);
             temperatureValue()
             render()
+            console.log("отрисовка после изменения температуры произошла")
         })
     })
-}
-
-// реализация смена фона по нажатию кнопки
-refreshBackground.addEventListener('click', async function () {
-    // await getImg(apiKeyImg);
-    wrapper.style.backgroundImage = `url(${dataUrlImg})`
-})
-
-
-// функция даты, времени и дня недели в локации пользователя
-const currentTime = () => {
-    date = new Date()
-    currentDay = date.getDay();
-    currentDate = date.getDate();
-    currentMonth = date.getMonth();
-    currentHours = date.getHours();
-    currentMinutes = date.getMinutes();
-    if (String(currentMinutes).length === 1) {
-        currentMinutes = Number("0" + currentMinutes)
-    }
-    if (String(currentHours).length === 1) {
-        currentHours =Number( "0" + currentHours)
-    }
-}
-
-//функция даты, времени и дня недели в локации по поиску
-
-const currentCityTime = () => {
-    const currentYear = String(cityDate).slice(0, 4);
-    currentMonth = Number(cityDate.slice(5, 7))-1;
-    if (String(currentMonth).startsWith('0')) {
-        currentMonth = Number(String(currentMonth).slice(1));
-    }
-    currentDate = Number(String(cityDate).slice(8, 10));
-    date = new Date()
-    currentMinutes = date.getMinutes();
-    date = new Date(Number(currentYear), currentMonth, currentDate)
-    currentDay = date.getDay();
-    currentHours = Number(String(cityDate).slice(11, 13));
-    if (String(currentMinutes).length === 1) {
-        currentMinutes = Number("0" + currentMinutes)
-    }
-    if (String(currentHours).endsWith(':')) {
-        currentHours = Number("0" + String(currentHours).slice(0,1))
-    }
-
 }
 
 // определение текущих единиц измерения
@@ -328,7 +285,57 @@ const temperatureValue = () => {
         temp_second_day = temp_f_second_day;
         temp_third_day = temp_f_third_day;
     }
+    console.log("расчитаны все температуры")
 }
+
+// реализация смена фона по нажатию кнопки
+refreshBackground.addEventListener('click', async function () {
+    // await getImg(apiKeyImg);
+    wrapper.style.backgroundImage = `url(${dataUrlImg})`
+})
+
+
+// функция даты, времени и дня недели в локации пользователя
+const currentTime = () => {
+    date = new Date()
+    currentDay = date.getDay();
+    currentDate = date.getDate();
+    currentMonth = date.getMonth();
+    currentHours = date.getHours();
+    currentMinutes = date.getMinutes();
+    if (String(currentMinutes).length === 1) {
+        currentMinutes = Number("0" + currentMinutes)
+    }
+    if (String(currentHours).length === 1) {
+        currentHours =Number( "0" + currentHours)
+    }
+    console.log("текущее время пользователя определено")
+}
+
+//функция даты, времени и дня недели в локации по поиску
+
+const currentCityTime = () => {
+    const currentYear = String(cityDate).slice(0, 4);
+    currentMonth = Number(cityDate.slice(5, 7))-1;
+    if (String(currentMonth).startsWith('0')) {
+        currentMonth = Number(String(currentMonth).slice(1));
+    }
+    currentDate = Number(String(cityDate).slice(8, 10));
+    date = new Date()
+    currentMinutes = date.getMinutes();
+    date = new Date(Number(currentYear), currentMonth, currentDate)
+    currentDay = date.getDay();
+    currentHours = Number(String(cityDate).slice(11, 13));
+    if (String(currentMinutes).length === 1) {
+        currentMinutes = Number("0" + currentMinutes)
+    }
+    if (String(currentHours).endsWith(':')) {
+        currentHours = Number("0" + String(currentHours).slice(0,1))
+    }
+
+    console.log("текущее время в городе поиска определено")
+}
+
 
 // создание стартовой страницы
 
@@ -340,7 +347,7 @@ async function startRender() {
     await getDataForecast(apiKey, city);
     await getMap(apiKeyMaps, latitude, longitude);
     temperatureValue();
-    // await getImg(apiKeyImg);
+    await getImg(apiKeyImg);
     currentTime();
     render();
     cityCurrent = city;
@@ -362,7 +369,7 @@ form.onsubmit = async function searchRender(event) {
         await getDataCurrent(apiKey, city);
         await getDataForecast(apiKey, city);
         await getMap(apiKeyMaps, latitude, longitude);
-        // await getImg(apiKeyImg);
+        await getImg(apiKeyImg);
     } catch (error) {
         alert("Проверьте правильность ввода");
         console.log(error)

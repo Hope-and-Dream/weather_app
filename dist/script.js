@@ -71,18 +71,18 @@ function getDataCurrent(key, location) {
 // функция полученися данных с API о погоде на 3 дня вперед
 function getDataForecast(key, location) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${location}&days=4`;
+        const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${location}&days=3`;
         const response = yield fetch(url);
         const forecastWeather = yield response.json();
-        temp_c_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
-        temp_f_first_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_f);
-        condition_first_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
-        temp_c_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
-        temp_f_second_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_f);
-        condition_second_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
-        temp_c_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_c);
-        temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[3].day.avgtemp_f);
-        condition_third_day = forecastWeather.forecast.forecastday[3].day.condition.icon;
+        temp_c_first_day = Math.round(forecastWeather.forecast.forecastday[0].day.avgtemp_c);
+        temp_f_first_day = Math.round(forecastWeather.forecast.forecastday[0].day.avgtemp_f);
+        condition_first_day = forecastWeather.forecast.forecastday[0].day.condition.icon;
+        temp_c_second_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_c);
+        temp_f_second_day = Math.round(forecastWeather.forecast.forecastday[1].day.avgtemp_f);
+        condition_second_day = forecastWeather.forecast.forecastday[1].day.condition.icon;
+        temp_c_third_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_c);
+        temp_f_third_day = Math.round(forecastWeather.forecast.forecastday[2].day.avgtemp_f);
+        condition_third_day = forecastWeather.forecast.forecastday[2].day.condition.icon;
     });
 }
 // функция для получения карты с API (чтение данных)
@@ -141,7 +141,7 @@ function render() {
         <div class="days">
             <div>
                 <div class="days__day-of-week">
-                    <p>${getElementAhead(1)}</p>
+                    <p>${getElementAhead(0)}</p>
                 </div>
                 <div class="days__temperature">
                     <p id="temp_first_day">${temp_first_day}°</p>
